@@ -1,0 +1,126 @@
+const CONFIG = {
+    url: 'https://cloud.squidex.io',
+    appName: 'goryu',
+    clientId: 'goryu:default',
+    clientSecret: 'fyxv1z5lwxbnnc04pzrg9h7kvifg4kpc6jtn9qm0ab8x'
+};
+
+function getBearerToken() {
+    return localStorage.getItem('token');
+}
+
+function setBearerToken(token) {
+    localStorage.setItem('token', token);
+}
+
+function clearBearerToken() {
+    localStorage.removeItem('token');
+}
+
+async function getContentItem(slug) {
+    const json = await getContent(`api/content/${CONFIG.appName}/contentitem/?$filter=data/slug/iv eq '${slug}'`);
+    const { items } = json;
+    if (items.length === 0) {
+        return null;
+    }
+    return parseContentItem(items[0]);
+}
+
+async function getNavigation() {
+    const json = await getContent(`api/content/${CONFIG.appName}/navigation`);
+    const { total, items } = json;
+    return { total, contentItems: items.map(x => x) };
+}
+
+async function getHpTeasers() {
+    const json = await getContent(`api/content/${CONFIG.appName}/hp-teaser`);
+    const { total, items } = json;
+    return { total, contentItems: items.map(x => x) };
+}
+
+async function getNews() {
+    const json = await getContent(`api/content/${CONFIG.appName}/news`);
+    const { total, items } = json;
+    return { total, contItems: items.map(x => x) };
+}
+
+function parseContentItem(response) {
+    return {
+        id: response.id,
+        slug: response.data.slug,
+        banner: response.data.Banner,
+        title: response.data.Title,
+        teaser: response.data.Teaser,
+        richText: response.data.RichText,
+        date: response.data.Date,
+    };
+}
+
+async function fetchBearerToken() {
+    // Check if we have already a bearer token in local store.
+    let token = getBearerToken();
+    if (token) {
+        return token;
+    }
+    const body = `grant_type=client_credentials&scope=squidex-api&client_id=${CONFIG.clientId}&client_secret=${CONFIG.clientSecret}`;
+
+    // Get the bearer token. Ensure that we use a client id with readonly permissions.
+    const response = await fetch(buildUrl('identity-server/connect/token'), { 
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body 
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to retrieve token, got ${response.statusText}`);
+    }
+    const json = await response.json();
+    token = json.access_token;
+    // Cache the bearer token in the local store.
+    setBearerToken(token);
+
+    return token;
+}
+
+function getContent(url) {
+    return getContentInternal(url, true);
+}
+
+async function getContentInternal(url, retry) {
+    // Fetch the bearer token.
+    const token = await fetchBearerToken();
+    const response = await fetch(buildUrl(url), {
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });     
+    if (!response.ok) {
+        if (response.status === 403 || response.status === 401) {
+            // If we get an error we clear the bearer token and retry the request.
+            clearBearerToken();
+            if (retry) {
+                return getContentInternal(url);
+            }
+        }
+        throw new Error(`Failed to retrieve content, got ${response.statusText}`);
+    }
+    return await response.json();
+}
+
+function buildUrl(url) {
+    if (url.length > 0 && url.startsWith('/')) {
+        url = url.substr(1);
+    }
+    const result = `${CONFIG.url}/${url}`;
+    return result;
+}
+
+function displayHash() {
+    var theHash = window.location.hash;
+    if (theHash.length == 0) { theHash = "_index"; }
+    var elems = document.querySelectorAll("#caption");
+    elems[0].innerText = "Current Hash: " + theHash;
+    return true;
+  }
