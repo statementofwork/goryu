@@ -26,22 +26,15 @@ async function getContentItem(slug) {
     return parseContentItem(items[0]);
 }
 
-async function getNavigation() {
-    const json = await getContent(`api/content/${CONFIG.appName}/navigation`);
-    const { total, items } = json;
-    return { total, contentItems: items.map(x => x) };
-}
-
-async function getHpTeasers() {
-    const json = await getContent(`api/content/${CONFIG.appName}/hp-teaser`);
-    const { total, items } = json;
-    return { total, contentItems: items.map(x => x) };
-}
-
-async function getNews() {
-    const json = await getContent(`api/content/${CONFIG.appName}/news`);
-    const { total, items } = json;
-    return { total, contItems: items.map(x => x) };
+async function getTopNavigations() {
+    const json = await getContent(`api/content/${CONFIG.appName}/topnavigation`);
+    console.log(json);
+    const json2 = await getContent(`api/content/${CONFIG.appName}/topnavigation/?$orderby=data/OrderBy/iv asc`);
+    const { total, items } = json2;
+    if (items.length === 0) {
+        return null;
+    }
+    return { total, navs: items.map(x => parseNavigation(x))};
 }
 
 function parseContentItem(response) {
@@ -55,6 +48,15 @@ function parseContentItem(response) {
         date: response.data.Date,
     };
 }
+
+function parseNavigation(response) {
+    return {
+        id: response.id,
+        title: response.data.Title,
+        link: response.data.Link,
+    };
+}
+
 
 async function fetchBearerToken() {
     // Check if we have already a bearer token in local store.

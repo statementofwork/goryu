@@ -103,24 +103,24 @@
         $('.info').load("info.html");
         $('footer').load("footer.html");    
 
-        var printNavigation = async () => {                  
-          var navigations = await getNavigation();
-          console.log(navigations);
-          $("#navTemplate").tmpl(navigations.contentItems[0].data.Referenties).appendTo(".nav");
+        var printTopNavigations = async () => {                  
+          var topNavigations = await getTopNavigations();
+          console.log(topNavigations);
+          $("#navTemplate").tmpl(topNavigations.navs).appendTo(".nav");
         };
-        printNavigation();  
+        printTopNavigations();  
 
         var printHpTeasers = async () => {                  
           var hpTeasers = await getHpTeasers();
           $("#hp-TeaserTemplate").tmpl(hpTeasers.Referenties).appendTo(".hp-teasers");
         };
-        printHpTeasers();  
+        //printHpTeasers();  
 
         var printNews = async () => {                  
           var news = await getNews();
           $("#newsTemplate").tmpl(news.Referenties).appendTo(".news");
         };
-        printNews();  
+        //printNews();  
 
         var printContentItem = async () => {   
           var theHash = window.location.hash;
@@ -144,7 +144,7 @@
   </script>
 
   <script id="navTemplate"  type="text/x-jQuery-tmpl">
-    <li><a href="${slug.iv}.html" title=" ${title.iv}" target="_self"> ${title.iv}</a></li>
+    <li><a href="${link.iv}" title=" ${title.iv}" target="_self"> ${title.iv}</a></li>
   </script>
 
   <script id="contentItemTemplate"  type="text/x-jQuery-tmpl">
