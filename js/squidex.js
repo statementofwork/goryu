@@ -17,8 +17,8 @@ function clearBearerToken() {
     localStorage.removeItem('token');
 }
 
-async function getContentItem(slug) {
-    const json = await getContent(`api/content/${CONFIG.appName}/contentitem/?$filter=data/slug/iv eq '${slug}'`);
+async function getPage(slug) {
+    const json = await getContent(`api/content/${CONFIG.appName}/page/?$filter=data/slug/iv eq '${slug}'`);
     const { items } = json;
     if (items.length === 0) {
         return null;
@@ -26,9 +26,34 @@ async function getContentItem(slug) {
     return parseContentItem(items[0]);
 }
 
+async function getNewsItem(slug) {
+    const json = await getContent(`api/content/${CONFIG.appName}/news/?$filter=data/slug/iv eq '${slug}'`);
+    const { items } = json;
+    if (items.length === 0) {
+        return null;
+    }
+    return parseContentItem(items[0]);
+}
+
+async function getNews() {
+    const json = await getContent(`api/content/${CONFIG.appName}/news/?$orderby=data/Date/iv desc`);
+    const { total, items } = json;
+    if (items.length === 0) {
+        return null;
+    }
+    return { total, newsItems: items.map(x => parseContentItem(x))};
+}
+
+async function getHpTeasers() {
+    const json = await getContent(`api/content/${CONFIG.appName}/news/?$filter=data/isTeaser/iv eq true`);
+    const { total, items } = json;
+    if (items.length === 0) {
+        return null;
+    }
+    return { total, teaserItems: items.map(x => parseContentItem(x))};
+}
+
 async function getTopNavigations() {
-    const json = await getContent(`api/content/${CONFIG.appName}/topnavigation`);
-    console.log(json);
     const json2 = await getContent(`api/content/${CONFIG.appName}/topnavigation/?$orderby=data/OrderBy/iv asc`);
     const { total, items } = json2;
     if (items.length === 0) {
@@ -125,4 +150,4 @@ function displayHash() {
     var elems = document.querySelectorAll("#caption");
     elems[0].innerText = "Current Hash: " + theHash;
     return true;
-  }
+}

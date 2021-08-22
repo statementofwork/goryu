@@ -25,9 +25,7 @@
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
         <script type="text/javascript" src="js/squidex.js"></script>
         <script src="js/clamp.min.js"></script>
-        
         <script src="js/mobile-menu.min.js"></script>
-
     </head>
 
     <body>
@@ -127,20 +125,22 @@
           if (theHash.length == 0) { theHash = "#home"; }
           console.log('theHash ' + theHash ); 
           var contentItem = await getContentItem(theHash.replace('#',''));
-          $('.page-title').append(contentItem.title.iv);
-          $('.content').append(contentItem.richText.iv);
+          $('.page-title').text(contentItem.title.iv);
+          $('.content').html(contentItem.richText.iv);
           $('.banner').css('background-image', 'url("https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '")');
-          $('.banner').append('<image src=https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '/> ' );
+          $('.banner').html('<image src=https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '/> ' );
         };
-        printContentItem();  
+        printContentItem(); 
+        function onRouteChanged() {
+          console.log("Hash changed!");
+          printContentItem();
+      }
+      window.addEventListener("hashchange", onRouteChanged);
       
       });
 
-      function displayHash() {
-        
-        return true;
-      }
       
+
   </script>
 
   <script id="navTemplate"  type="text/x-jQuery-tmpl">

@@ -1,0 +1,165 @@
+<html>
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics-->
+        <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-34366180-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-34366180-1');          
+        </script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Homepage - Aikido Gent - Ban Sen Juku</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,500,700&amp;display=swap" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+        <link rel="shortcut icon" href="assets/favicon/favicon.ico">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+        <meta name="theme-color" content="#ffffff">
+        <meta description="Homepage van Aikido Gent - Ban Sen Juku in Wondelgem (sporthal Neptunus)">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+        <script type="text/javascript" src="js/squidex.js"></script>
+        <script src="js/clamp.min.js"></script>
+        <script src="js/mobile-menu.min.js"></script>
+    </head>
+
+    <body class="home">
+      <div class="wrapper">
+        <header></header>
+        <div class="page-content">
+            <a class="logo desktop" href="/" target="_self"></a>
+            <div class="header"></div>
+            <div class="intro">
+              <div class="banner"></div>
+              <div class="info"></div>              
+          </div>
+          <div class="main-content">
+            <h2 class="page-title"></h2>
+            <div class="hp-teasers"></div>  
+            <div class="news">
+              <h2>Nieuws</h2>
+              <ul>
+                <div class="newsItems">
+              </ul>
+            </div>  
+            <div class="content">    
+            </div>
+          
+            <footer></footer>
+          </div>
+        </div>
+        <footer></footer>
+        <div class="mobile-menu-backdrop"></div>
+        <div class="mobile-menu">
+          <ul>
+            <span class="nav"></span>
+          </ul>
+        </div>
+      </div>
+  
+    <script>  
+      $(document).ready(function(){
+        $('header').load("header.html");
+        $('.logo').load("logo.html");
+        $('.info').load("info.html");
+        $('footer').load("footer.html");    
+
+        var printTopNavigations = async () => {                  
+          var topNavigations = await getTopNavigations();
+          //console.log(topNavigations);
+          $("#navTemplate").tmpl(topNavigations.navs).appendTo(".nav");
+        };
+        printTopNavigations();  
+
+        var printHpTeasers = async () => {     
+          var hpTeasers = await getHpTeasers();
+          console.log('hpTeasers'); 
+          console.log(hpTeasers);             
+          $("#hpTeaserTemplate").tmpl(hpTeasers.teaserItems).appendTo(".hp-teasers");
+        };
+        printHpTeasers();  
+
+        var printNews = async () => {                  
+          var news = await getNews();
+          console.log('news');
+          console.log(news);
+          $("#newsTemplate").tmpl(news.newsItems).appendTo(".newsItems");
+        };
+        printNews();  
+
+        var printPage = async () => {   
+          var contentItem = await getPage('home');
+          $('.page-title').text(contentItem.title.iv);
+          $('.content').html(contentItem.richText.iv);
+          $('.banner').css('background-image', 'url("https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '")');
+          $('.banner').html('<image src=https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '/> ' );
+        };
+        printPage();
+
+        /*
+        var printContentItem = async () => {   
+          var theHash = window.location.hash;
+          if (theHash.length == 0) { theHash = "#home"; }
+          console.log('theHash ' + theHash ); 
+          var contentItem = await getContentItem(theHash.replace('#',''));
+          $('.page-title').text(contentItem.title.iv);
+          $('.content').html(contentItem.richText.iv);
+          $('.banner').css('background-image', 'url("https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '")');
+          $('.banner').html('<image src=https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '/> ' );
+        };
+        printContentItem(); 
+        
+        
+        function onRouteChanged() {
+          console.log("Hash changed!");
+          printContentItem();
+      }
+      window.addEventListener("hashchange", onRouteChanged);
+      */
+      
+      });
+  </script>
+
+      <script id="navTemplate"  type="text/x-jQuery-tmpl">
+        <li><a href="${link.iv}" title=" ${title.iv}" target="_self"> ${title.iv}</a></li>
+      </script>
+
+      <script id="contentItemTemplate"  type="text/x-jQuery-tmpl">
+        <h2>${slug.iv}</h2>
+        ${title.iv}<br>
+        {{html richText.iv}}
+      </script>
+
+      <script id="newsTemplate"  type="text/x-jQuery-tmpl">
+        <li class="news-teaser"><a href="nieuws.html#${slug.iv}" target="_self">
+          <div class="image" style="background-image: url('https://cloud.squidex.io/api/assets/goryu/${banner.iv}')"></div>
+          <div class="content">
+            <h3>${title.iv}</h3>
+            <p style="overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
+              ${teaser.iv}
+            </p>
+          </div>
+          <div class="chevron-right">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+              <path d="M13.5 8l-9 8-2-2.3L8.9 8 2.5 2.3l2-2.3z"></path>
+            </svg>
+          </div></a>
+        </li>
+      </script>
+
+      <script id="hpTeaserTemplate"  type="text/x-jQuery-tmpl">
+        <a class="teaser" href="nieuws.html#${slug.iv}">
+          <div class="image" style="background-image: url('https://cloud.squidex.io/api/assets/goryu/${banner.iv}')"></div>
+            <h3>${title.iv}</h3>
+            <p>${teaser.iv}</p>
+          <div class="more-link">Lees meer</div>
+        </a>
+      </script>
+
+    </body>
+</html>
