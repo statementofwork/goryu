@@ -10,7 +10,7 @@
         </script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Homepage - Aikido Gent - Ban Sen Juku</title>
+        <title>Links - Aikido Gent - Ban Sen Juku</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,500,700&amp;display=swap" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
@@ -28,7 +28,7 @@
         <script src="js/mobile-menu.min.js"></script>
     </head>
 
-    <body class="home">
+    <body>
       <div class="wrapper">
         <header></header>
         <div class="page-content">
@@ -40,14 +40,8 @@
           </div>
           <div class="main-content">
             <h2 class="page-title"></h2>
-            <div class="hp-teasers"></div>  
-            <div class="news">
-              <h2>Nieuws</h2>
-              <ul>
-                <div class="newsItems">
-              </ul>
-            </div>    
-            <footer></footer>
+              <div class="content"></div>
+              <footer></footer>
           </div>
         </div>
         <footer></footer>
@@ -63,40 +57,7 @@
         <li><a href="${link.iv}" title=" ${title.iv}" target="_self"> ${title.iv}</a></li>
       </script>
 
-      <script id="hpTeaserTemplate"  type="text/x-jQuery-tmpl">
-        <a class="teaser" href="nieuws.html#${slug.iv}">
-          <div class="image" style="background-image: url('https://cloud.squidex.io/api/assets/goryu/${banner.iv}')"></div>
-            <h3>${title.iv}</h3>
-            <p>${teaser.iv}</p>
-          <div class="more-link">Lees meer</div>
-        </a>
-      </script>
 
-
-      <script id="newsTemplate"  type="text/x-jQuery-tmpl">
-        <li class="news-teaser"><a href="nieuws.html#${slug.iv}" target="_self">
-          <div class="image" style="background-image: url('https://cloud.squidex.io/api/assets/goryu/${banner.iv}')"></div>
-          <div class="content">
-            <h3>${title.iv}</h3>
-            <p style="overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-              ${teaser.iv}
-            </p>
-          </div>
-          <div class="chevron-right">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-              <path d="M13.5 8l-9 8-2-2.3L8.9 8 2.5 2.3l2-2.3z"></path>
-            </svg>
-          </div></a>
-        </li>
-      </script>
-
-      
-      <script id="contentItemTemplate"  type="text/x-jQuery-tmpl">
-        <h2>${slug.iv}</h2>
-        ${title.iv}<br>
-        {{html richText.iv}}
-      </script>
-  
     <script>  
       $(document).ready(function(){
         $('header').load("header.html");
@@ -111,27 +72,10 @@
         };
         printTopNavigations();  
 
-        var printHpTeasers = async () => {     
-          var hpTeasers = await getHpTeasers();
-          console.log('hpTeasers'); 
-          console.log(hpTeasers);             
-          $("#hpTeaserTemplate").tmpl(hpTeasers.teaserItems).appendTo(".hp-teasers");
-        };
-        printHpTeasers();  
-
       
-        var printNews = async () => {     
-          const delay = ms => new Promise(res => setTimeout(res, ms));             
-          var news = await getNews();
-          console.log('news');
-          console.log(news);
-          await delay(100);
-          $("#newsTemplate").tmpl(news.newsItems).appendTo(".newsItems");
-        };      
-        printNews();  
-        
+  
         var printPage = async () => {   
-          var pageItem = await getPage('home');
+          var pageItem = await getPage('links');
           $('.page-title').text(pageItem.title.iv);
           $('.content').html(pageItem.richText.iv);
           $('.banner').css('background-image', 'url("https://cloud.squidex.io/api/assets/goryu/' + pageItem.banner.iv + '")');
@@ -139,26 +83,7 @@
         };
         printPage();
 
-        /*
-        var printContentItem = async () => {   
-          var theHash = window.location.hash;
-          if (theHash.length == 0) { theHash = "#home"; }
-          console.log('theHash ' + theHash ); 
-          var contentItem = await getContentItem(theHash.replace('#',''));
-          $('.page-title').text(contentItem.title.iv);
-          $('.content').html(contentItem.richText.iv);
-          $('.banner').css('background-image', 'url("https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '")');
-          $('.banner').html('<image src=https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '/> ' );
-        };
-        printContentItem(); 
-        
-        
-        function onRouteChanged() {
-          console.log("Hash changed!");
-          printContentItem();
-      }
-      window.addEventListener("hashchange", onRouteChanged);
-      */
+       
       
       });
   </script>

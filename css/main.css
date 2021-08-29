@@ -847,7 +847,7 @@ nav ul li span.active {
 }
 
 .news li.news-teaser .news-teaser-content .chevron-right {
-  display: none;
+  //display: none;
 }
 
 .teaser {
