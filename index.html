@@ -27,6 +27,7 @@
         <script src="js/clamp.min.js"></script>
         <script src="js/mobile-menu.min.js"></script>
     </head>
+
     <body class="home">
       <div class="wrapper">
         <header></header>
@@ -70,8 +71,7 @@
 
         var printTopNavigations = async () => {                  
           var topNavigations = await getTopNavigations();
-          console.log('topNavigations'); 
-          console.log(topNavigations);
+          //console.log(topNavigations);
           $("#navTemplate").tmpl(topNavigations.navs).appendTo(".nav");
         };
         printTopNavigations();  
@@ -80,26 +80,24 @@
           var hpTeasers = await getHpTeasers();
           console.log('hpTeasers'); 
           console.log(hpTeasers);             
+          $("#hpTeaserTemplate").tmpl(hpTeasers.teaserItems).appendTo(".hp-teasers");
         };
         printHpTeasers();  
-        $("#hpTeaserTemplate").tmpl(hpTeasers.teaserItems).appendTo(".hp-teasers");
 
         var printNews = async () => {                  
           var news = await getNews();
           console.log('news');
           console.log(news);
+          $("#newsTemplate").tmpl(news.newsItems).appendTo(".newsItems");
         };
         printNews();  
-        $("#newsTemplate").tmpl(news.newsItems).appendTo(".newsItems");
 
         var printPage = async () => {   
-          var page = await getPage('home');
-          console.log('page');
-          console.log(page);
-          $('.page-title').text(page.title.iv);
-          $('.content').html(page.richText.iv);
-          $('.banner').css('background-image', 'url("https://cloud.squidex.io/api/assets/goryu/' + page.banner.iv + '")');
-          $('.banner').html('<image src=https://cloud.squidex.io/api/assets/goryu/' + page.banner.iv + '/> ' );
+          var contentItem = await getPage('home');
+          $('.page-title').text(contentItem.title.iv);
+          $('.content').html(contentItem.richText.iv);
+          $('.banner').css('background-image', 'url("https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '")');
+          $('.banner').html('<image src=https://cloud.squidex.io/api/assets/goryu/' + contentItem.banner.iv + '/> ' );
         };
         printPage();
 
