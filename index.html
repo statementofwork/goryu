@@ -80,17 +80,17 @@
           var hpTeasers = await getHpTeasers();
           console.log('hpTeasers'); 
           console.log(hpTeasers);             
-          $("#hpTeaserTemplate").tmpl(hpTeasers.teaserItems).appendTo(".hp-teasers");
         };
         printHpTeasers();  
+        $("#hpTeaserTemplate").tmpl(hpTeasers.teaserItems).appendTo(".hp-teasers");
 
         var printNews = async () => {                  
           var news = await getNews();
           console.log('news');
           console.log(news);
-          $("#newsTemplate").tmpl(news.newsItems).appendTo(".newsItems");
         };
         printNews();  
+        $("#newsTemplate").tmpl(news.newsItems).appendTo(".newsItems");
 
         var printPage = async () => {   
           var contentItem = await getPage('home');
